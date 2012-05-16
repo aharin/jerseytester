@@ -34,7 +34,8 @@
 
 
     <modules>
-        <module>htmlunit-jersey</module>
+        <module>jerseytester-htmlunit</module>
+        <module>jerseytester-tests</module>
     </modules>
 
     <dependencies>

@@ -1,4 +1,4 @@
-package com.thoughtworks.inproctester.htmlunit.jersey;
+package com.thoughtworks.inproctester.jerseytester.htmlunit;
 
 
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
