@@ -5,8 +5,8 @@ import com.thoughtworks.inproctester.jerseytester.htmlunit.JerseyClientWebConnec
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class JerseyClientHtmlunitDriver extends HtmlUnitDriver {
-    public JerseyClientHtmlunitDriver(Client httpAppTester) {
-        getWebClient().setWebConnection(new JerseyClientWebConnection(httpAppTester, getWebClient().getCookieManager()));
+    public JerseyClientHtmlunitDriver(Client jerseyClient) {
+        getWebClient().setWebConnection(new JerseyClientWebConnection(jerseyClient, getWebClient().getCookieManager()));
     }
 }
 
