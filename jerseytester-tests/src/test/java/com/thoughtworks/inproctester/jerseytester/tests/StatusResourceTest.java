@@ -3,7 +3,7 @@ package com.thoughtworks.inproctester.jerseytester.tests;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.test.framework.LowLevelAppDescriptor;
 import com.sun.jersey.test.framework.spi.container.TestContainer;
-import com.sun.jersey.test.framework.spi.container.inmemory.InMemoryTestContainerFactory;
+import com.thoughtworks.inproctester.jerseytester.container.InMemoryTestContainerFactoryEx;
 import com.thoughtworks.inproctester.jerseytester.testapp.TestApplication;
 import com.thoughtworks.inproctester.jerseytester.webdriver.JerseyClientHtmlunitDriver;
 import org.junit.AfterClass;
@@ -27,7 +27,7 @@ public class StatusResourceTest {
 
     @BeforeClass
     public static void start() {
-        testContainer = new InMemoryTestContainerFactory().create(
+        testContainer = new InMemoryTestContainerFactoryEx().create(
                 UriBuilder.fromUri("http://localhost/").port(8080).build(),
                 new LowLevelAppDescriptor.Builder(TestApplication.resourceConfig()).build());
 

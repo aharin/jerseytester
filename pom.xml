@@ -36,6 +36,7 @@
     <modules>
         <module>jerseytester-htmlunit</module>
         <module>jerseytester-webdriver</module>
+        <module>jerseytester-container</module>
         <module>jerseytester-tests</module>
     </modules>
 
