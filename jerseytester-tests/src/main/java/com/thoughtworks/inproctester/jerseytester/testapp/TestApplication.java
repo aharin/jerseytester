@@ -11,15 +11,7 @@ import java.util.HashSet;
 
 public class TestApplication {
     public static void main(String[] args) throws IOException {
-        ResourceConfig resourceConfig = new DefaultResourceConfig(
-                new HashSet<Class<?>>() {{
-                    add(TestResource.class);
-                }}
-        );
-
-        resourceConfig.getSingletons().add(new RuntimeExceptionMapper());
-        resourceConfig.getSingletons().add(new NotFoundExceptionMapper());
-        resourceConfig.getProperties().put(FreemarkerViewProcessor.FREEMARKER_TEMPLATES_BASE_PATH, "/ftl");
+        ResourceConfig resourceConfig = resourceConfig();
 
         Closeable server = SimpleServerFactory.create("http://0.0.0.0:8080", resourceConfig);
         while (true) {
@@ -29,5 +21,18 @@ public class TestApplication {
                 server.close();
             }
         }
+    }
+
+    public static ResourceConfig resourceConfig() {
+        ResourceConfig resourceConfig = new DefaultResourceConfig(
+                new HashSet<Class<?>>() {{
+                    add(TestResource.class);
+                }}
+        );
+
+        resourceConfig.getSingletons().add(new RuntimeExceptionMapper());
+        resourceConfig.getSingletons().add(new NotFoundExceptionMapper());
+        resourceConfig.getProperties().put(FreemarkerViewProcessor.FREEMARKER_TEMPLATES_BASE_PATH, "/ftl");
+        return resourceConfig;
     }
 }
