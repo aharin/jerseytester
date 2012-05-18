@@ -15,6 +15,9 @@ import com.sun.jersey.test.framework.spi.container.TestContainerFactory;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
+/**
+ * A trimmed down version of InMemoryTestContainerFactory which omits logging by default.
+ */
 public class InMemoryTestContainerFactoryEx implements TestContainerFactory {
     @SuppressWarnings("unchecked")
     public Class<LowLevelAppDescriptor> supports() {

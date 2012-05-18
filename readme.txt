@@ -1,0 +1,1 @@
+Provides an interface for testing jersey (typically in memory) from web driver.
