@@ -37,7 +37,7 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>1.12</version>
+            <version>${version.jersey}</version>
         </dependency>
 
         <dependency>
@@ -49,13 +49,13 @@
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-simple-server</artifactId>
-            <version>1.12</version>
+            <version>${version.jersey}</version>
         </dependency>
 
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-freemarker</artifactId>
-            <version>1.12</version>
+            <version>${version.jersey}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.sun.jersey</groupId>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>com.sun.jersey.jersey-test-framework</groupId>
             <artifactId>jersey-test-framework-core</artifactId>
-            <version>1.12</version>
+            <version>${version.jersey}</version>
             <exclusions>
                 <exclusion>
                     <groupId>junit</groupId>
@@ -86,7 +86,7 @@
         <dependency>
             <groupId>com.sun.jersey.jersey-test-framework</groupId>
             <artifactId>jersey-test-framework-inmemory</artifactId>
-            <version>1.12</version>
+            <version>${version.jersey}</version>
         </dependency>
     </dependencies>
 
