@@ -5,13 +5,16 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
+import org.apache.http.HttpHeaders;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class JerseyClientWebConnection implements WebConnection {
 
@@ -58,12 +61,25 @@ public class JerseyClientWebConnection implements WebConnection {
 
         ClientRequest.Builder requestBuilder = ClientRequest.create().type(request.getEncodingType().getName());
 
+        String contentType = getContentType(request);
         if (request.getHttpMethod() == HttpMethod.POST) {
-            if (request.getEncodingType() == FormEncodingType.URL_ENCODED) {
+            if (request.getEncodingType() == FormEncodingType.URL_ENCODED && contentType.equals(MediaType.APPLICATION_FORM_URLENCODED)) {
                 requestBuilder.entity(new UrlEncodedContent(request.getRequestParameters()).generateFormDataAsString());
+            } else {
+                requestBuilder.entity(request.getRequestBody());
             }
         }
         return requestBuilder.build(getRequestUri(request), request.getHttpMethod().name());
+    }
+
+    private String getContentType(WebRequest request) {
+        for (Map.Entry<String, String> header : request.getAdditionalHeaders().entrySet()) {
+            if (header.getKey().equals(HttpHeaders.CONTENT_TYPE)) {
+                return header.getValue();
+            }
+        }
+
+        return "";
     }
 
     private URI getRequestUri(WebRequest request) {
