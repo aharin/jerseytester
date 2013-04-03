@@ -59,9 +59,10 @@ public class JerseyClientWebConnection implements WebConnection {
 
     private ClientRequest adaptHtmlunitRequest(WebRequest request) {
 
-        ClientRequest.Builder requestBuilder = ClientRequest.create().type(request.getEncodingType().getName());
-
         String contentType = getContentType(request);
+        String acceptType = getAcceptType(request);
+        ClientRequest.Builder requestBuilder = ClientRequest.create().type(contentType).accept(acceptType);
+
         if (request.getHttpMethod() == HttpMethod.POST) {
             if (request.getEncodingType() == FormEncodingType.URL_ENCODED && contentType.equals(MediaType.APPLICATION_FORM_URLENCODED)) {
                 requestBuilder.entity(new UrlEncodedContent(request.getRequestParameters()).generateFormDataAsString());
@@ -79,7 +80,17 @@ public class JerseyClientWebConnection implements WebConnection {
             }
         }
 
-        return "";
+        return "*/*";
+    }
+
+    private String getAcceptType(WebRequest request) {
+        for (Map.Entry<String, String> header : request.getAdditionalHeaders().entrySet()) {
+            if (header.getKey().equals(HttpHeaders.ACCEPT)) {
+                return header.getValue();
+            }
+        }
+
+        return "*/*";
     }
 
     private URI getRequestUri(WebRequest request) {
