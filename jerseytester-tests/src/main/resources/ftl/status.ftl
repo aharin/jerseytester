@@ -9,6 +9,10 @@
 <body>
 
     <h1>Status Page</h1>
+    <dl>
+        <dt>Accept:</dt>
+        <dd id="accept_header.value">${accept}</dd>
+    </dl>
 
 </body>
 </html>
