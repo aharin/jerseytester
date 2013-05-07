@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.thoughtworks.inproctester</groupId>
         <artifactId>jerseytester-project</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
     </parent>
 
     <groupId>com.thoughtworks.inproctester</groupId>
     <artifactId>jerseytester-container</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <dependencies>
         <dependency>
             <groupId>com.sun.jersey.jersey-test-framework</groupId>
