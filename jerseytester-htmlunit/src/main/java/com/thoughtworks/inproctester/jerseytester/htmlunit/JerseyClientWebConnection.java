@@ -1,10 +1,12 @@
 package com.thoughtworks.inproctester.jerseytester.htmlunit;
 
 import com.gargoylesoftware.htmlunit.*;
+import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
+import org.apache.commons.collections.iterators.EntrySetMapIterator;
 import org.apache.http.HttpHeaders;
 
 import javax.ws.rs.core.MediaType;
@@ -13,6 +15,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,10 +38,22 @@ public class JerseyClientWebConnection implements WebConnection {
     }
 
     private ClientResponse processJerseyClientRequest(ClientRequest jerseyClientRequest) throws IOException {
-//        addCookiesToRequest(jerseyClientRequest);
+        addCookiesToRequest(jerseyClientRequest);
         ClientResponse testerResponse = jerseyClient.handle(jerseyClientRequest);
-//        storeCookiesFromResponse(jerseyClientRequest, testerResponse);
         return testerResponse;
+    }
+
+    private void addCookiesToRequest(ClientRequest jerseyClientRequest) {
+        if (!cookieManager.getCookies().isEmpty()) {
+            String cookieHeaderValue = "";
+            for (Cookie cookie : cookieManager.getCookies()) {
+                if (jerseyClientRequest.getURI().toASCIIString().contains(cookie.getDomain()) &&
+                    (cookie.getPath() == null || jerseyClientRequest.getURI().getPath().startsWith(cookie.getPath()))) {
+                        cookieHeaderValue = cookieHeaderValue + cookie.getName() + "=" + cookie.getValue() + "; ";
+                }
+            }
+            jerseyClientRequest.getHeaders().putSingle(javax.ws.rs.core.HttpHeaders.COOKIE, cookieHeaderValue);
+        }
     }
 
     static WebResponseData adaptJerseyClientResponse(ClientResponse jerseyClientResponse) throws IOException {
