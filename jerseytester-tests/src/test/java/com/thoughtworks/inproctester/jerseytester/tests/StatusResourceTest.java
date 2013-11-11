@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
 import javax.ws.rs.core.UriBuilder;
@@ -53,6 +54,15 @@ public class StatusResourceTest {
         webDriver.get("http://localhost");
         assertThat(webDriver.getTitle(), is("Status"));
         assertThat(webDriver.findElement(By.id("accept_header.value")).getText(), is("text/html"));
+    }
+
+    @Test
+    public void shouldReadCookiesFromRequest() {
+        WebDriver webDriver = new JerseyClientHtmlunitDriver(client);
+        webDriver.get("http://localhost");
+        webDriver.manage().addCookie(new Cookie("cookieone", "valueone", "localhost", "/", null));
+        webDriver.get("http://localhost");
+        assertThat(webDriver.findElement(By.id("cookie_header.value")).getText(), is("cookieone=valueone;"));
     }
 
 

@@ -13,6 +13,10 @@
         <dt>Accept:</dt>
         <dd id="accept_header.value">${accept!}</dd>
     </dl>
+    <dl>
+        <dt>Cookie:</dt>
+        <dd id="cookie_header.value">${cookie!}</dd>
+    </dl>
 
 </body>
 </html>

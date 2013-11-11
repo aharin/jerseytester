@@ -14,7 +14,12 @@ public class TestResource {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Viewable status(@HeaderParam("Accept") final String accept) {
-        return new Viewable("/status.ftl", new HashMap<String, String>() {{put("accept", accept);}});
+    public Viewable status(@HeaderParam("Accept") String accept, @HeaderParam("Cookie") String cookie) {
+        HashMap<String, String> model = new HashMap<String, String>();
+        model.put("accept", accept);
+        model.put("cookie", cookie);
+
+
+        return new Viewable("/status.ftl", model);
     }
 }
