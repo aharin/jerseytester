@@ -9,7 +9,6 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.thoughtworks.inproctester</groupId>
     <artifactId>jerseytester-htmlunit</artifactId>
     <version>1.0.3-SNAPSHOT</version>
 
@@ -27,8 +26,8 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5-rc1</version>
+            <artifactId>mockito-core</artifactId>
+            <version>1.9.5</version>
         </dependency>
 
     </dependencies>

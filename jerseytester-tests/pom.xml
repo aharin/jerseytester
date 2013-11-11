@@ -8,7 +8,6 @@
         <version>1.0.3-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.thoughtworks.inproctester</groupId>
     <artifactId>jerseytester-tests</artifactId>
     <version>1.0.3-SNAPSHOT</version>
 
