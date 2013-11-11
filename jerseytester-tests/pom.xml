@@ -27,13 +27,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.thoughtworks.inproctester</groupId>
-            <artifactId>jerseytester-container</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
             <version>${version.jersey}</version>
