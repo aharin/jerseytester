@@ -1,10 +1,10 @@
 package com.thoughtworks.inproctester.jerseytester.webdriver;
 
 import com.google.common.net.HttpHeaders;
-import com.sun.jersey.api.client.Client;
 import com.thoughtworks.inproctester.jerseytester.htmlunit.JerseyClientWebConnection;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 
 public class JerseyClientHtmlunitDriver extends HtmlUnitDriver {

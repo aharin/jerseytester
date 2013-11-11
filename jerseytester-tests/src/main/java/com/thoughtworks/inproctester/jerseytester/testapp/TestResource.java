@@ -1,6 +1,6 @@
 package com.thoughtworks.inproctester.jerseytester.testapp;
 
-import com.sun.jersey.api.view.Viewable;
+import org.glassfish.jersey.server.mvc.Viewable;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;

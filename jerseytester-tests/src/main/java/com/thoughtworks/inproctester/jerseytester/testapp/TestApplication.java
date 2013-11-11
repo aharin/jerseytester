@@ -1,19 +1,20 @@
 package com.thoughtworks.inproctester.jerseytester.testapp;
 
-import com.sun.jersey.api.core.DefaultResourceConfig;
-import com.sun.jersey.api.core.ResourceConfig;
-import com.sun.jersey.freemarker.FreemarkerViewProcessor;
-import com.sun.jersey.simple.container.SimpleServerFactory;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature;
+import org.glassfish.jersey.server.mvc.freemarker.FreemarkerProperties;
+import org.glassfish.jersey.simple.SimpleContainerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.HashSet;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class TestApplication {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, URISyntaxException {
         ResourceConfig resourceConfig = resourceConfig();
 
-        Closeable server = SimpleServerFactory.create("http://0.0.0.0:8080", resourceConfig);
+        Closeable server = SimpleContainerFactory.create(new URI("http://0.0.0.0:8080"), resourceConfig);
         while (true) {
             try {
                 Thread.sleep(1000);
@@ -24,15 +25,13 @@ public class TestApplication {
     }
 
     public static ResourceConfig resourceConfig() {
-        ResourceConfig resourceConfig = new DefaultResourceConfig(
-                new HashSet<Class<?>>() {{
-                    add(TestResource.class);
-                }}
-        );
+        ResourceConfig resourceConfig = new ResourceConfig().property(FreemarkerProperties.TEMPLATES_BASE_PATH, "/ftl")
+                .register(FreemarkerMvcFeature.class)
+                .register(TestResource.class);
 
-        resourceConfig.getSingletons().add(new RuntimeExceptionMapper());
-        resourceConfig.getSingletons().add(new NotFoundExceptionMapper());
-        resourceConfig.getProperties().put(FreemarkerViewProcessor.FREEMARKER_TEMPLATES_BASE_PATH, "/ftl");
+
+        resourceConfig.register(new RuntimeExceptionMapper());
+        resourceConfig.register(new WebApplicationExceptionMapper());
         return resourceConfig;
     }
 }

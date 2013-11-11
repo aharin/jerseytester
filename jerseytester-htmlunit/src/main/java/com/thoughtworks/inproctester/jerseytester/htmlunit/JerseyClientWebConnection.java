@@ -3,19 +3,19 @@ package com.thoughtworks.inproctester.jerseytester.htmlunit;
 import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientRequest;
-import com.sun.jersey.api.client.ClientResponse;
-import org.apache.commons.collections.iterators.EntrySetMapIterator;
 import org.apache.http.HttpHeaders;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,61 +31,61 @@ public class JerseyClientWebConnection implements WebConnection {
 
 
     public WebResponse getResponse(WebRequest webRequest) throws IOException {
-        ClientRequest jerseyClientRequest = adaptHtmlunitRequest(webRequest);
-        ClientResponse jerseyClientResponse = processJerseyClientRequest(jerseyClientRequest);
+        Invocation jerseyInvocation = adaptHtmlunitRequest(webRequest);
+        Response jerseyClientResponse = jerseyInvocation.invoke();
         WebResponseData htmlunitResponseData = adaptJerseyClientResponse(jerseyClientResponse);
         return new WebResponse(htmlunitResponseData, webRequest, 0);
     }
 
-    private ClientResponse processJerseyClientRequest(ClientRequest jerseyClientRequest) throws IOException {
-        addCookiesToRequest(jerseyClientRequest);
-        ClientResponse testerResponse = jerseyClient.handle(jerseyClientRequest);
-        return testerResponse;
-    }
-
-    private void addCookiesToRequest(ClientRequest jerseyClientRequest) {
+    private void addCookiesToRequest(URI uri, Invocation.Builder invocationBuilder) {
         if (!cookieManager.getCookies().isEmpty()) {
-            String cookieHeaderValue = "";
+
             for (Cookie cookie : cookieManager.getCookies()) {
-                if (jerseyClientRequest.getURI().toASCIIString().contains(cookie.getDomain()) &&
-                    (cookie.getPath() == null || jerseyClientRequest.getURI().getPath().startsWith(cookie.getPath()))) {
-                        cookieHeaderValue = cookieHeaderValue + cookie.getName() + "=" + cookie.getValue() + "; ";
+                if (uri.toASCIIString().contains(cookie.getDomain()) &&
+                    (cookie.getPath() == null || uri.getPath().startsWith(cookie.getPath()))) {
+                        invocationBuilder.cookie(cookie.getName(), cookie.getValue());
                 }
             }
-            jerseyClientRequest.getHeaders().putSingle(javax.ws.rs.core.HttpHeaders.COOKIE, cookieHeaderValue);
         }
     }
 
-    static WebResponseData adaptJerseyClientResponse(ClientResponse jerseyClientResponse) throws IOException {
+    static WebResponseData adaptJerseyClientResponse(Response jerseyClientResponse) throws IOException {
         final List<NameValuePair> headers = new ArrayList<NameValuePair>();
-        MultivaluedMap<String, String> responseHeaders = jerseyClientResponse.getHeaders();
+        MultivaluedMap<String, Object> responseHeaders = jerseyClientResponse.getHeaders();
         for (String headerName : responseHeaders.keySet()) {
-            List<String> headerValues = responseHeaders.get(headerName);
-            for (String headerValue : headerValues) {
-                headers.add(new NameValuePair(headerName, headerValue));
+            List<Object> headerValues = responseHeaders.get(headerName);
+            for (Object headerValue : headerValues) {
+                headers.add(new NameValuePair(headerName, headerValue.toString()));
             }
         }
 
-        String content = jerseyClientResponse.getEntity(String.class);
+        String content = jerseyClientResponse.readEntity(String.class);
         if (content == null) content = "";
-        return new WebResponseData(content.getBytes("UTF-8"), jerseyClientResponse.getStatus(), jerseyClientResponse.getClientResponseStatus().getReasonPhrase(), headers);
+        return new WebResponseData(content.getBytes("UTF-8"), jerseyClientResponse.getStatus(), jerseyClientResponse.getStatusInfo().getReasonPhrase(), headers);
     }
 
 
-    private ClientRequest adaptHtmlunitRequest(WebRequest request) {
+    private Invocation adaptHtmlunitRequest(WebRequest request) {
 
         String contentType = getContentType(request);
         String acceptType = getAcceptType(request);
-        ClientRequest.Builder requestBuilder = ClientRequest.create().type(contentType).accept(acceptType);
+
+        URI requestUri = getRequestUri(request);
+        WebTarget jerseyWebTarget = jerseyClient.target(requestUri);
+        Invocation.Builder builder = jerseyWebTarget.request().accept(acceptType);
+
+        addCookiesToRequest(requestUri, builder);
 
         if (request.getHttpMethod() == HttpMethod.POST) {
+            String content;
             if (request.getEncodingType() == FormEncodingType.URL_ENCODED && contentType.equals(MediaType.APPLICATION_FORM_URLENCODED)) {
-                requestBuilder.entity(new UrlEncodedContent(request.getRequestParameters()).generateFormDataAsString());
+                content = new UrlEncodedContent(request.getRequestParameters()).generateFormDataAsString();
             } else {
-                requestBuilder.entity(request.getRequestBody());
+                content = request.getRequestBody();
             }
+            return builder.buildPost(Entity.<String>entity(content, contentType));
         }
-        return requestBuilder.build(getRequestUri(request), request.getHttpMethod().name());
+        return builder.build(request.getHttpMethod().name());
     }
 
     private String getContentType(WebRequest request) {

@@ -34,7 +34,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sun.jersey</groupId>
+            <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
             <version>${version.jersey}</version>
         </dependency>
@@ -46,14 +46,14 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sun.jersey.contribs</groupId>
-            <artifactId>jersey-simple-server</artifactId>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-simple-http</artifactId>
             <version>${version.jersey}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sun.jersey.contribs</groupId>
-            <artifactId>jersey-freemarker</artifactId>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-mvc-freemarker</artifactId>
             <version>${version.jersey}</version>
             <exclusions>
                 <exclusion>
@@ -64,7 +64,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sun.jersey.jersey-test-framework</groupId>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-mvc</artifactId>
+            <version>${version.jersey}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.test-framework</groupId>
             <artifactId>jersey-test-framework-core</artifactId>
             <version>${version.jersey}</version>
             <exclusions>
@@ -83,8 +89,8 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey.jersey-test-framework</groupId>
-            <artifactId>jersey-test-framework-inmemory</artifactId>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-inmemory</artifactId>
             <version>${version.jersey}</version>
         </dependency>
     </dependencies>
