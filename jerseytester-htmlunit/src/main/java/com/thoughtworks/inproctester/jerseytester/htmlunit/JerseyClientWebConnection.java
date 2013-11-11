@@ -8,7 +8,6 @@ import org.apache.http.HttpHeaders;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -38,13 +37,11 @@ public class JerseyClientWebConnection implements WebConnection {
     }
 
     private void addCookiesToRequest(URI uri, Invocation.Builder invocationBuilder) {
-        if (!cookieManager.getCookies().isEmpty()) {
 
-            for (Cookie cookie : cookieManager.getCookies()) {
-                if (uri.toASCIIString().contains(cookie.getDomain()) &&
+        for (Cookie cookie : cookieManager.getCookies()) {
+            if (uri.toASCIIString().contains(cookie.getDomain()) &&
                     (cookie.getPath() == null || uri.getPath().startsWith(cookie.getPath()))) {
-                        invocationBuilder.cookie(cookie.getName(), cookie.getValue());
-                }
+                invocationBuilder.cookie(cookie.getName(), cookie.getValue());
             }
         }
     }
@@ -71,8 +68,7 @@ public class JerseyClientWebConnection implements WebConnection {
         String acceptType = getAcceptType(request);
 
         URI requestUri = getRequestUri(request);
-        WebTarget jerseyWebTarget = jerseyClient.target(requestUri);
-        Invocation.Builder builder = jerseyWebTarget.request().accept(acceptType);
+        Invocation.Builder builder = jerseyClient.target(requestUri).request().accept(acceptType);
 
         addCookiesToRequest(requestUri, builder);
 

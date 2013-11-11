@@ -48,12 +48,6 @@
             <groupId>org.glassfish.jersey.ext</groupId>
             <artifactId>jersey-mvc-freemarker</artifactId>
             <version>${version.jersey}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun.jersey</groupId>
-                    <artifactId>jersey-servlet</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
