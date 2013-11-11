@@ -22,4 +22,14 @@ public class TestResource {
 
         return new Viewable("/status.ftl", model);
     }
+
+    @Path("cookie")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Viewable cookie(@HeaderParam("Cookie") String cookie) {
+        HashMap<String, String> model = new HashMap<String, String>();
+        model.put("cookie", cookie);
+
+        return new Viewable("/cookie.ftl", model);
+    }
 }

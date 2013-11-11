@@ -62,8 +62,38 @@ public class StatusResourceTest {
         webDriver.get("http://localhost");
         webDriver.manage().addCookie(new Cookie("cookieone", "valueone", "localhost", "/", null));
         webDriver.get("http://localhost");
+        assertThat(webDriver.getTitle(), is("Status"));
         assertThat(webDriver.findElement(By.id("cookie_header.value")).getText(), is("cookieone=valueone;"));
     }
 
+    @Test
+    public void shouldReadCookiesFromInChildPage() {
+        WebDriver webDriver = new JerseyClientHtmlunitDriver(client);
+        webDriver.get("http://localhost");
+        webDriver.manage().addCookie(new Cookie("cookieone", "valueone", "localhost", "/", null));
+        webDriver.get("http://localhost/cookie");
+        assertThat(webDriver.getTitle(), is("Cookie"));
+        assertThat(webDriver.findElement(By.id("cookie_header.value")).getText(), is("cookieone=valueone;"));
+    }
+
+    @Test
+    public void shouldNotSeeCookieFromDifferentDomain() {
+        WebDriver webDriver = new JerseyClientHtmlunitDriver(client);
+        webDriver.get("http://localhost");
+        webDriver.manage().addCookie(new Cookie("cookieone", "valueone", "localhost", "/", null));
+        webDriver.get("http://thoughtworks");
+        assertThat(webDriver.getTitle(), is("Status"));
+        assertThat(webDriver.findElement(By.id("cookie_header.value")).getText(), is(""));
+    }
+
+    @Test
+    public void shouldNotSeeCookieForDifferentPath() {
+        WebDriver webDriver = new JerseyClientHtmlunitDriver(client);
+        webDriver.get("http://localhost");
+        webDriver.manage().addCookie(new Cookie("cookieone", "valueone", "localhost", "/cookie", null));
+        webDriver.get("http://localhost");
+        assertThat(webDriver.getTitle(), is("Status"));
+        assertThat(webDriver.findElement(By.id("cookie_header.value")).getText(), is(""));
+    }
 
 }
