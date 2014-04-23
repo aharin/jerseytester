@@ -1,21 +1,24 @@
 package com.thoughtworks.inproctester.jerseytester.htmlunit;
 
-import com.gargoylesoftware.htmlunit.*;
+import com.gargoylesoftware.htmlunit.CookieManager;
+import com.gargoylesoftware.htmlunit.FormEncodingType;
+import com.gargoylesoftware.htmlunit.HttpMethod;
+import com.gargoylesoftware.htmlunit.WebConnection;
+import com.gargoylesoftware.htmlunit.WebRequest;
+import com.gargoylesoftware.htmlunit.WebResponse;
+import com.gargoylesoftware.htmlunit.WebResponseData;
 import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
-import org.apache.commons.collections.iterators.EntrySetMapIterator;
 import org.apache.http.HttpHeaders;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,8 +42,7 @@ public class JerseyClientWebConnection implements WebConnection {
 
     private ClientResponse processJerseyClientRequest(ClientRequest jerseyClientRequest) throws IOException {
         addCookiesToRequest(jerseyClientRequest);
-        ClientResponse testerResponse = jerseyClient.handle(jerseyClientRequest);
-        return testerResponse;
+        return jerseyClient.handle(jerseyClientRequest);
     }
 
     private void addCookiesToRequest(ClientRequest jerseyClientRequest) {
@@ -79,7 +81,7 @@ public class JerseyClientWebConnection implements WebConnection {
         ClientRequest.Builder requestBuilder = ClientRequest.create().type(contentType).accept(acceptType);
 
         if (request.getHttpMethod() == HttpMethod.POST) {
-            if (request.getEncodingType() == FormEncodingType.URL_ENCODED && contentType.equals(MediaType.APPLICATION_FORM_URLENCODED)) {
+            if ((request.getEncodingType() == FormEncodingType.URL_ENCODED) && (!request.getRequestParameters().isEmpty())) {
                 requestBuilder.entity(new UrlEncodedContent(request.getRequestParameters()).generateFormDataAsString());
             } else {
                 requestBuilder.entity(request.getRequestBody());
