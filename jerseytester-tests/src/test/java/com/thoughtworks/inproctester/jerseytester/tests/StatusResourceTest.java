@@ -1,5 +1,6 @@
 package com.thoughtworks.inproctester.jerseytester.tests;
 
+import com.thoughtworks.inproctester.jerseytester.testapp.DataConstants;
 import com.thoughtworks.inproctester.jerseytester.testapp.TestApplication;
 import com.thoughtworks.inproctester.jerseytester.webdriver.JerseyClientHtmlunitDriver;
 import org.glassfish.jersey.client.ClientConfig;
@@ -19,6 +20,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.UriBuilder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
 
@@ -98,4 +100,12 @@ public class StatusResourceTest {
         assertThat(webDriver.findElement(By.id("cookie_header.value")).getText(), is(""));
     }
 
+    @Test
+    public void ajaxPostShouldShowFormContent() {
+        WebDriver webDriver = new JerseyClientHtmlunitDriver(client);
+        webDriver.get("http://localhost");
+        webDriver.findElement(By.id("my-form")).submit();
+        assertThat(webDriver.getPageSource(), containsString(DataConstants.AJAX_JSON_DUMMY_DATA_KEY));
+        assertThat(webDriver.getPageSource(), containsString(DataConstants.AJAX_JSON_DUMMY_DATA_VALUE));
+    }
 }

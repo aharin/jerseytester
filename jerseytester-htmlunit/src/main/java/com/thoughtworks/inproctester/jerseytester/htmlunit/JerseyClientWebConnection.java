@@ -74,7 +74,7 @@ public class JerseyClientWebConnection implements WebConnection {
 
         if (request.getHttpMethod() == HttpMethod.POST) {
             String content;
-            if (request.getEncodingType() == FormEncodingType.URL_ENCODED && contentType.equals(MediaType.APPLICATION_FORM_URLENCODED)) {
+            if (request.getEncodingType() == FormEncodingType.URL_ENCODED && (!request.getRequestParameters().isEmpty())) {
                 content = new UrlEncodedContent(request.getRequestParameters()).generateFormDataAsString();
             } else {
                 content = request.getRequestBody();
