@@ -5,31 +5,31 @@
     <parent>
         <groupId>com.thoughtworks.inproctester</groupId>
         <artifactId>jerseytester-project</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>jerseytester-tests</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
 
     <dependencies>
 
         <dependency>
             <groupId>com.thoughtworks.inproctester</groupId>
             <artifactId>jerseytester-htmlunit</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.thoughtworks.inproctester</groupId>
             <artifactId>jerseytester-webdriver</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.thoughtworks.inproctester</groupId>
             <artifactId>jerseytester-container</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
