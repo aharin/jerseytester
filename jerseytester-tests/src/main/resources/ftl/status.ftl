@@ -17,12 +17,14 @@
     <dt>Cookie:</dt>
     <dd id="cookie_header.value">${cookie!}</dd>
 </dl>
-<form id="my-form" onsubmit="return triggerAjax()" method="post">
+<form id="my-form" onsubmit="return triggerAjaxPost()" method="post">
     <input name="${dummy_key}" value=${dummy_value}/>
     <input id="ajax-post" type="submit" value="try an ajax post"/>
 </form>
+<span id="form-span"></span>
+<span id="my-span" onclick="triggerAjaxGet()">Lol</span>
 <script>
-    function triggerAjax() {
+    function triggerAjaxPost() {
         var form = document.forms[0];
 
         form.onsubmit = function (e) {
@@ -44,6 +46,17 @@
             xhr.onloadend = function () {
             };
         };
+    }
+
+    function triggerAjaxGet() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.status === 204) {
+                document.getElementById("my-span").innerHTML = "there was no content";
+            }
+        };
+        xhr.open("GET", "/no-content", true);
+        xhr.send();
     }
 </script>
 </body>

@@ -42,4 +42,10 @@ public class TestResource {
     public Response post(String postBody) {
         return Response.ok(postBody).build();
     }
+
+    @Path("no-content")
+    @GET
+    public Response aResourceWithNoContent() {
+        return Response.noContent().build();
+    }
 }
