@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import javax.ws.rs.core.UriBuilder;
@@ -102,10 +103,21 @@ public class StatusResourceTest {
     @Test
     public void ajaxPostShouldShowFormContent() {
         WebDriver webDriver = new JerseyClientHtmlunitDriver(client);
+        ((HtmlUnitDriver) webDriver).setJavascriptEnabled(true);
         webDriver.get("http://localhost");
         webDriver.findElement(By.id("my-form")).submit();
         assertThat(webDriver.getPageSource(), containsString(DataConstants.AJAX_JSON_DUMMY_DATA_KEY));
         assertThat(webDriver.getPageSource(), containsString(DataConstants.AJAX_JSON_DUMMY_DATA_VALUE));
+    }
+
+    @Test
+    public void noContentResponsesShouldBeSupported() throws Exception {
+        WebDriver webDriver = new JerseyClientHtmlunitDriver(client);
+        ((HtmlUnitDriver) webDriver).setJavascriptEnabled(true);
+        webDriver.get("http://localhost");
+        webDriver.findElement(By.id("my-span")).click();
+        Thread.sleep(1000);
+        assertThat(webDriver.findElement(By.id("my-span")).getText(), is("there was no content"));
     }
 
 }

@@ -68,7 +68,10 @@ public class JerseyClientWebConnection implements WebConnection {
             }
         }
 
-        String content = jerseyClientResponse.getEntity(String.class);
+        String content = null;
+        if (jerseyClientResponse.getStatus() != 204) {
+            content = jerseyClientResponse.getEntity(String.class);
+        }
         if (content == null) content = "";
         return new WebResponseData(content.getBytes("UTF-8"), jerseyClientResponse.getStatus(), jerseyClientResponse.getClientResponseStatus().getReasonPhrase(), headers);
     }
