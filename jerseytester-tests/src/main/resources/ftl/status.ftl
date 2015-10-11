@@ -51,7 +51,7 @@
     function triggerAjaxGet() {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
-            if (xhr.status === 204) {
+            if (xhr.readyState == 4 && xhr.status === 204) {
                 document.getElementById("my-span").innerHTML = "there was no content";
             }
         };
