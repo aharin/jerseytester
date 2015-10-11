@@ -5,6 +5,7 @@ import com.thoughtworks.inproctester.jerseytester.testapp.TestApplication;
 import com.thoughtworks.inproctester.jerseytester.webdriver.JerseyClientHtmlunitDriver;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.server.ApplicationHandler;
+import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainer;
 import org.junit.AfterClass;
@@ -36,7 +37,7 @@ public class StatusResourceTest {
     public static void start() {
         testContainer = new InMemoryTestContainerFactory().create(
                 UriBuilder.fromUri("http://localhost/").port(8080).build(),
-                new ApplicationHandler(TestApplication.resourceConfig()));
+                DeploymentContext.builder(TestApplication.resourceConfig()).build());
 
         testContainer.start();
     }

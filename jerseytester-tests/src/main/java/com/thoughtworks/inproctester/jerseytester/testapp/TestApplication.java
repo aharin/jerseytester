@@ -2,7 +2,6 @@ package com.thoughtworks.inproctester.jerseytester.testapp;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature;
-import org.glassfish.jersey.server.mvc.freemarker.FreemarkerProperties;
 import org.glassfish.jersey.simple.SimpleContainerFactory;
 
 import java.io.Closeable;
@@ -25,7 +24,7 @@ public class TestApplication {
     }
 
     public static ResourceConfig resourceConfig() {
-        ResourceConfig resourceConfig = new ResourceConfig().property(FreemarkerProperties.TEMPLATES_BASE_PATH, "/ftl")
+        ResourceConfig resourceConfig = new ResourceConfig().property(FreemarkerMvcFeature.TEMPLATE_BASE_PATH, "/ftl")
                 .register(FreemarkerMvcFeature.class)
                 .register(TestResource.class);
 
