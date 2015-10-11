@@ -1,12 +1,12 @@
 package com.thoughtworks.inproctester.jerseytester.tests;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.test.framework.LowLevelAppDescriptor;
-import com.sun.jersey.test.framework.spi.container.TestContainer;
-import com.thoughtworks.inproctester.jerseytester.container.InMemoryTestContainerFactoryEx;
 import com.thoughtworks.inproctester.jerseytester.testapp.DataConstants;
 import com.thoughtworks.inproctester.jerseytester.testapp.TestApplication;
 import com.thoughtworks.inproctester.jerseytester.webdriver.JerseyClientHtmlunitDriver;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.server.ApplicationHandler;
+import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
+import org.glassfish.jersey.test.spi.TestContainer;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -17,6 +17,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.UriBuilder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,14 +30,13 @@ public class StatusResourceTest {
 
     private static TestContainer testContainer;
 
-
     private Client client;
 
     @BeforeClass
     public static void start() {
-        testContainer = new InMemoryTestContainerFactoryEx().create(
+        testContainer = new InMemoryTestContainerFactory().create(
                 UriBuilder.fromUri("http://localhost/").port(8080).build(),
-                new LowLevelAppDescriptor.Builder(TestApplication.resourceConfig()).build());
+                new ApplicationHandler(TestApplication.resourceConfig()));
 
         testContainer.start();
     }
@@ -48,7 +49,8 @@ public class StatusResourceTest {
 
     @Before
     public void setUp() {
-        client = testContainer.getClient();
+        ClientConfig clientConfig = testContainer.getClientConfig();
+        client = ClientBuilder.newClient(clientConfig);
     }
 
 
@@ -67,7 +69,7 @@ public class StatusResourceTest {
         webDriver.manage().addCookie(new Cookie("cookieone", "valueone", "localhost", "/", null));
         webDriver.get("http://localhost");
         assertThat(webDriver.getTitle(), is("Status"));
-        assertThat(webDriver.findElement(By.id("cookie_header.value")).getText(), is("cookieone=valueone;"));
+        assertThat(webDriver.findElement(By.id("cookie_header.value")).getText(), is("$Version=1;cookieone=valueone"));
     }
 
     @Test
@@ -77,7 +79,7 @@ public class StatusResourceTest {
         webDriver.manage().addCookie(new Cookie("cookieone", "valueone", "localhost", "/", null));
         webDriver.get("http://localhost/cookie");
         assertThat(webDriver.getTitle(), is("Cookie"));
-        assertThat(webDriver.findElement(By.id("cookie_header.value")).getText(), is("cookieone=valueone;"));
+        assertThat(webDriver.findElement(By.id("cookie_header.value")).getText(), is("$Version=1;cookieone=valueone"));
     }
 
     @Test

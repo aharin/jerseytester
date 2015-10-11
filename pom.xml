@@ -30,14 +30,13 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <version.jersey>1.17.1</version.jersey>
+        <version.jersey>2.4.1</version.jersey>
     </properties>
 
 
     <modules>
         <module>jerseytester-htmlunit</module>
         <module>jerseytester-webdriver</module>
-        <module>jerseytester-container</module>
         <module>jerseytester-tests</module>
     </modules>
 
