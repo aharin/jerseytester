@@ -4,7 +4,6 @@ import com.thoughtworks.inproctester.jerseytester.testapp.DataConstants;
 import com.thoughtworks.inproctester.jerseytester.testapp.TestApplication;
 import com.thoughtworks.inproctester.jerseytester.webdriver.JerseyClientHtmlunitDriver;
 import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.server.ApplicationHandler;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainer;
@@ -15,7 +14,6 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import javax.ws.rs.client.Client;
@@ -105,8 +103,8 @@ public class StatusResourceTest {
 
     @Test
     public void ajaxPostShouldShowFormContent() {
-        WebDriver webDriver = new JerseyClientHtmlunitDriver(client);
-        ((HtmlUnitDriver) webDriver).setJavascriptEnabled(true);
+        HtmlUnitDriver webDriver = new JerseyClientHtmlunitDriver(client);
+        webDriver.setJavascriptEnabled(true);
         webDriver.get("http://localhost");
         webDriver.findElement(By.id("my-form")).submit();
         assertThat(webDriver.getPageSource(), containsString(DataConstants.AJAX_JSON_DUMMY_DATA_KEY));
@@ -115,8 +113,8 @@ public class StatusResourceTest {
 
     @Test
     public void noContentResponsesShouldBeSupported() throws Exception {
-        WebDriver webDriver = new JerseyClientHtmlunitDriver(client);
-        ((HtmlUnitDriver) webDriver).setJavascriptEnabled(true);
+        HtmlUnitDriver webDriver = new JerseyClientHtmlunitDriver(client);
+        webDriver.setJavascriptEnabled(true);
         webDriver.get("http://localhost");
         webDriver.findElement(By.id("my-span")).click();
         Thread.sleep(1000);
