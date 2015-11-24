@@ -43,4 +43,12 @@ public class TestResource {
     public Response aResourceWithNoContent() {
         return Response.noContent().build();
     }
+
+    @Path("js-test")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Viewable getSomeJSNotSupportedByDefaultHTMLUnitClient() {
+        return new Viewable("/js-test.ftl");
+    }
+
 }

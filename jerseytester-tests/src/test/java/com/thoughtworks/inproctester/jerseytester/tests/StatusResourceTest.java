@@ -1,5 +1,6 @@
 package com.thoughtworks.inproctester.jerseytester.tests;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.thoughtworks.inproctester.jerseytester.testapp.DataConstants;
 import com.thoughtworks.inproctester.jerseytester.testapp.TestApplication;
 import com.thoughtworks.inproctester.jerseytester.webdriver.JerseyClientHtmlunitDriver;
@@ -119,6 +120,16 @@ public class StatusResourceTest {
         webDriver.findElement(By.id("my-span")).click();
         Thread.sleep(1000);
         assertThat(webDriver.findElement(By.id("my-span")).getText(), is("there was no content"));
+    }
+
+    @Test
+    public void settingBrowserToNewerVersion_shouldSupportAddEventListener() throws Exception {
+        HtmlUnitDriver webDriver = new JerseyClientHtmlunitDriver(BrowserVersion.INTERNET_EXPLORER_11, client);
+        webDriver.setJavascriptEnabled(true);
+        webDriver.get("http://localhost/js-test");
+        assertThat(webDriver.getTitle(), is("default"));
+        webDriver.findElement(By.id("click-me")).click();
+        assertThat(webDriver.getTitle(), is("worked"));
     }
 
 }
