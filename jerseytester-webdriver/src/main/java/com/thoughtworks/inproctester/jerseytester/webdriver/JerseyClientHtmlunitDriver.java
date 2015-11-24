@@ -1,5 +1,6 @@
 package com.thoughtworks.inproctester.jerseytester.webdriver;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.google.common.net.HttpHeaders;
 import com.thoughtworks.inproctester.jerseytester.htmlunit.JerseyClientWebConnection;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -9,7 +10,12 @@ import javax.ws.rs.core.MediaType;
 
 public class JerseyClientHtmlunitDriver extends HtmlUnitDriver {
     public JerseyClientHtmlunitDriver(Client jerseyClient) {
-        getWebClient().setWebConnection(new JerseyClientWebConnection(jerseyClient, getWebClient().getCookieManager()));
+        setWebConnection(jerseyClient);
+    }
+
+    public JerseyClientHtmlunitDriver(BrowserVersion browserVersion, Client jerseyClient) {
+        super(browserVersion);
+        setWebConnection(jerseyClient);
     }
 
     @Override
@@ -17,6 +23,10 @@ public class JerseyClientHtmlunitDriver extends HtmlUnitDriver {
         getWebClient().addRequestHeader(HttpHeaders.ACCEPT, MediaType.TEXT_HTML);
         super.get(url);
         getWebClient().removeRequestHeader(HttpHeaders.ACCEPT);
+    }
+
+    private void setWebConnection(Client jerseyClient) {
+        getWebClient().setWebConnection(new JerseyClientWebConnection(jerseyClient, getWebClient().getCookieManager()));
     }
 }
 
